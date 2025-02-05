@@ -12,3 +12,7 @@ const App = () => {
 };
 
 export default App;
+
+
+// npm install dicom-parser
+// npm install react-dropzone

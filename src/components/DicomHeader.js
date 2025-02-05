@@ -1,17 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import dicomParser from 'dicom-parser';
 import { useDropzone } from 'react-dropzone';
-import DisplayData from './DisplayData';
 
 function DicomHeader() {
     const [parseError, setParseError] = useState("");
     const [sopInstanceUid, setSopInstanceUid] = useState("");
     const [patientId, setPatientId] = useState("");
-    const [patientName, setPatientName] = useState("");  // 환자 이름
-    const [patientSex, setPatientSex] = useState("");    // 성별
-    const [patientBirthDate, setPatientBirthDate] = useState("");  // 생일
-    const [patientAge, setPatientAge] = useState("");    // 나이
-    const [patientWeight, setPatientWeight] = useState("");  // 몸무게
+    const [patientName, setPatientName] = useState("");
+    const [patientSex, setPatientSex] = useState("");
+    const [patientBirthDate, setPatientBirthDate] = useState("");
+    const [patientAge, setPatientAge] = useState("");
+    const [patientWeight, setPatientWeight] = useState("");
 
     const onDrop = useCallback(acceptedFiles => {
         clearPage();
@@ -35,7 +34,7 @@ function DicomHeader() {
         try {
             const dataSet = dicomParser.parseDicom(byteArray);
 
-            // 기존 정보 파싱
+            // 정보 파싱
             const sopInstanceUid = dataSet.string('x0020000d');
             setSopInstanceUid(sopInstanceUid);
 
@@ -81,6 +80,21 @@ function DicomHeader() {
         reader.readAsArrayBuffer(file);
     }
 
+    useEffect(() => {
+        const patientData = {
+            parseError,
+            sopInstanceUid,
+            patientId,
+            patientName,
+            patientSex,
+            patientBirthDate,
+            patientAge,
+            patientWeight
+        };
+
+        console.log("Patient Data:", patientData);
+    }, [parseError, sopInstanceUid, patientId, patientName, patientSex, patientBirthDate, patientAge, patientWeight])
+
     return (
         <div>
             <div className="column">
@@ -95,8 +109,18 @@ function DicomHeader() {
                             )}
                         </div>
                     </div>
-                    {/* DisplayData 컴포넌트에 추가된 데이터 전달 */}
-                    <DisplayData image={{ parseError, sopInstanceUid, patientId, patientName, patientSex, patientBirthDate, patientAge, patientWeight }} />
+
+                    {/* 결과를 화면에 */}
+                    <div>
+                        <p>Parse Error: {parseError}</p>
+                        <p>SopInstanceUid: {sopInstanceUid}</p>
+                        <p>Patient ID: {patientId}</p>
+                        <p>Patient Name: {patientName}</p>
+                        <p>Patient Sex: {patientSex}</p>
+                        <p>Patient Birth Date: {patientBirthDate}</p>
+                        <p>Patient Age: {patientAge}</p>
+                        <p>Patient Weight: {patientWeight}</p>
+                    </div>
                 </div>
             </div>
         </div>
