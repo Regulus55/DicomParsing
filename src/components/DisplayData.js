@@ -1,15 +1,18 @@
-import React from 'react'
+// src/components/DisplayData.js
 
 const DisplayData = ({ image }) => {
-    
     return (
-        <div >
+        <div>
             <p>Parse Error: {image.parseError}</p>
             <p>SopInstanceUid: {image.sopInstanceUid}</p>
             <p>Patient ID: {image.patientId}</p>
-            <p>Other Patient ID'S: {image.otherPatientIds}</p>
+            <p>Patient Name: {image.patientName}</p>
+            <p>Patient Sex: {image.patientSex}</p>
+            <p>Patient Birth Date: {image.patientBirthDate}</p>
+            <p>Patient Age: {image.patientAge}</p>
+            <p>Patient Weight: {image.patientWeight}</p>
         </div>
-    )
+    );
 }
 
-export default DisplayData
+export default DisplayData;  // Default export

@@ -7,7 +7,11 @@ function DicomHeader() {
     const [parseError, setParseError] = useState("");
     const [sopInstanceUid, setSopInstanceUid] = useState("");
     const [patientId, setPatientId] = useState("");
-    const [otherPatientIds, setOtherPatientIds] = useState("");
+    const [patientName, setPatientName] = useState("");  // 환자 이름
+    const [patientSex, setPatientSex] = useState("");    // 성별
+    const [patientBirthDate, setPatientBirthDate] = useState("");  // 생일
+    const [patientAge, setPatientAge] = useState("");    // 나이
+    const [patientWeight, setPatientWeight] = useState("");  // 몸무게
 
     const onDrop = useCallback(acceptedFiles => {
         clearPage();
@@ -20,13 +24,18 @@ function DicomHeader() {
         setParseError('');
         setSopInstanceUid('');
         setPatientId('');
-        setOtherPatientIds('');
+        setPatientName('');
+        setPatientSex('');
+        setPatientBirthDate('');
+        setPatientAge('');
+        setPatientWeight('');
     }
 
     function parseByteArray(byteArray) {
         try {
             const dataSet = dicomParser.parseDicom(byteArray);
 
+            // 기존 정보 파싱
             const sopInstanceUid = dataSet.string('x0020000d');
             setSopInstanceUid(sopInstanceUid);
 
@@ -34,15 +43,28 @@ function DicomHeader() {
             if (patientId !== undefined) {
                 setPatientId(patientId);
             } else {
-                alert("element has no data");
+                alert("Patient ID element has no data");
             }
 
-            const otherPatientIds = dataSet.string('x00101002');
-            if (otherPatientIds !== undefined) {
-                setOtherPatientIds(otherPatientIds);
+            const patientName = dataSet.string('x00100010');
+            if (patientName !== undefined) {
+                setPatientName(patientName);
             } else {
-                setOtherPatientIds("element not present");
+                alert("Patient Name element has no data");
             }
+
+            const patientSex = dataSet.string('x00100040');
+            setPatientSex(patientSex || "N/A");
+
+            const patientBirthDate = dataSet.string('x00100030');
+            setPatientBirthDate(patientBirthDate || "N/A");
+
+            const patientAge = dataSet.string('x00101010');
+            setPatientAge(patientAge || "N/A");
+
+            const patientWeight = dataSet.string('x00101030');
+            setPatientWeight(patientWeight || "N/A");
+
         } catch (err) {
             setParseError(err.message);
         }
@@ -60,7 +82,7 @@ function DicomHeader() {
     }
 
     return (
-        <div >
+        <div>
             <div className="column">
                 <div className="col-md-12">
                     <div id="dropZone">
@@ -73,7 +95,8 @@ function DicomHeader() {
                             )}
                         </div>
                     </div>
-                    <DisplayData image={{ parseError, sopInstanceUid, patientId, otherPatientIds }} />
+                    {/* DisplayData 컴포넌트에 추가된 데이터 전달 */}
+                    <DisplayData image={{ parseError, sopInstanceUid, patientId, patientName, patientSex, patientBirthDate, patientAge, patientWeight }} />
                 </div>
             </div>
         </div>
