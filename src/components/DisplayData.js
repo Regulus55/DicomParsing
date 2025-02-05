@@ -1,22 +1,15 @@
 import React from 'react'
 
-function DisplayData(props) {
-
-        // Styling to make the text white
-        const textStyle = {
-            color: 'white'
-        }
+const DisplayData = ({ image }) => {
     
-    // Displaying the DICOM attribute data
     return (
-        <div style={textStyle}>
-            <p>Parse Error: {props.image.parseError}</p>
-            <p>SopInstanceUid: {props.image.SopInstanceUid}</p>
-            <p>Patient ID: {props.image.patientId}</p>
-            <p>Other Patient ID'S: {props.image.otherPatientIds}</p>
+        <div >
+            <p>Parse Error: {image.parseError}</p>
+            <p>SopInstanceUid: {image.sopInstanceUid}</p>
+            <p>Patient ID: {image.patientId}</p>
+            <p>Other Patient ID'S: {image.otherPatientIds}</p>
         </div>
     )
 }
 
-// Exporting the functional component
 export default DisplayData
